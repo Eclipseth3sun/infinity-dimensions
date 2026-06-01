@@ -2,6 +2,10 @@
 
 A port of Minecraft's 20w14∞ (April Fools 2020) snapshot for Minecraft **26.1.2** using Fabric.
 
+[![Download](https://img.shields.io/github/v/release/Eclipseth3sun/infinity-dimensions?label=Download&color=blue)](https://github.com/Eclipseth3sun/infinity-dimensions/releases/latest)
+
+> **To install:** download the `.zip` from the link above, extract it, and drop the `.jar` into your `.minecraft/mods` folder. Requires [Fabric Loader](https://fabricmc.net/use/) and [Fabric API 0.150.0+26.1.2](https://modrinth.com/mod/fabric-api).
+
 ---
 
 ## What the Mod Adds
