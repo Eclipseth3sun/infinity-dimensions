@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        maven {
+            url = 'https://maven.fabricmc.net/'
+            // Required for loom SNAPSHOT versions
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'infinity-dimensions'

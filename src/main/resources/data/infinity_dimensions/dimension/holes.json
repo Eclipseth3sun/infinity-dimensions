@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:holes",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "holes",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:library",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "library",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

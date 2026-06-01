@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "infinity_dimensions",
+  "version": "${version}",
+  "name": "Infinity Dimensions",
+  "description": "A port of the 20w14∞ April Fools snapshot to modern Minecraft. Throw a written book into a Nether Portal to travel to a unique dimension based on its contents.",
+  "authors": ["jrock"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jrock.infinity.InfinityDimensions"
+    ],
+    "client": [
+      "com.jrock.infinity.InfinityDimensionsClient"
+    ]
+  },
+  "mixins": [
+    "infinity_dimensions.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "fabric-api": "*",
+    "minecraft": "26.1.2"
+  }
+}

@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:chess",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "chess",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

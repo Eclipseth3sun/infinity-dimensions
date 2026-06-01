@@ -1,0 +1,6 @@
+﻿{
+  "parent": "infinity_dimensions:block/infinity_portal_x",
+  "textures": {
+    "portal": "infinity_dimensions:block/infinity_portal_soul_blue"
+  }
+}

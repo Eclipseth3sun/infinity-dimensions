@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:clubs",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "clubs",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

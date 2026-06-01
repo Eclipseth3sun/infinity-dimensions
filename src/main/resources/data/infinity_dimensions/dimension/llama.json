@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:llama",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "llama",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

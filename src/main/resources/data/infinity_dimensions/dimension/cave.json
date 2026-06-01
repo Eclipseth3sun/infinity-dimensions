@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:cave",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "cave",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

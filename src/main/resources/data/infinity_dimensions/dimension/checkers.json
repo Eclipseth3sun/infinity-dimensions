@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:checkers",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "checkers",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

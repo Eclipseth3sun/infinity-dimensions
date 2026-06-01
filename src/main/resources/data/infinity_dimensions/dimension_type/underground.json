@@ -1,0 +1,18 @@
+﻿{
+  "infiniburn": "#minecraft:infiniburn_overworld",
+  "coordinate_scale": 1,
+  "monster_spawn_light_level": {
+    "min_inclusive": 0,
+    "type": "minecraft:uniform",
+    "max_inclusive": 7
+  },
+  "min_y": -64,
+  "has_skylight": false,
+  "logical_height": 256,
+  "height": 384,
+  "ambient_light": 0.1,
+  "monster_spawn_block_light_limit": 0,
+  "has_ceiling": true,
+    "effects": "minecraft:overworld",
+  "has_ender_dragon_fight": false
+}

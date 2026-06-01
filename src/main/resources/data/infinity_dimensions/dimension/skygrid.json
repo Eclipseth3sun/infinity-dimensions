@@ -1,0 +1,11 @@
+﻿{
+    "type":  "infinity_dimensions:skygrid",
+    "generator":  {
+                      "type":  "infinity_dimensions:named",
+                      "theme":  "skygrid",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

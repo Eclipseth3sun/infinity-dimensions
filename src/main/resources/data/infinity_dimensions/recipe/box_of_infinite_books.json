@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BBB",
+    "BSB",
+    "BBB"
+  ],
+  "key": {
+    "B": "minecraft:book",
+    "S": "minecraft:bookshelf"
+  },
+  "result": {
+    "id": "infinity_dimensions:box_of_infinite_books"
+  }
+}
