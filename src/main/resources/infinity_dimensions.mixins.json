@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "NetherPortalMixin",
-    "MinecraftServerAccessor"
+    "MinecraftServerAccessor",
+    "WeatherCycleMixin"
   ],
   "injectors": {
     "defaultRequire": 1
