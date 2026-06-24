@@ -10,6 +10,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
@@ -148,7 +149,7 @@ public class NamedChunkGenerator extends ChunkGenerator {
 
     private static BlockState ant(int x, int y, int z) {
         if (y == -64) return Blocks.BEDROCK.defaultBlockState();
-        if (y == 64)  return Blocks.WHITE_CONCRETE.defaultBlockState();
+        if (y == 64)  return Blocks.CONCRETE.pick(DyeColor.WHITE).defaultBlockState();
         return null;
     }
 
@@ -158,7 +159,7 @@ public class NamedChunkGenerator extends ChunkGenerator {
         if (y <  64)  return Blocks.DIRT.defaultBlockState();
         if (y == 64) {
             boolean black = ((Math.floorDiv(x, 4) + Math.floorDiv(z, 4)) & 1) == 0;
-            return (black ? Blocks.BLACK_CONCRETE : Blocks.WHITE_CONCRETE).defaultBlockState();
+            return Blocks.CONCRETE.pick(black ? DyeColor.BLACK : DyeColor.WHITE).defaultBlockState();
         }
         return null;
     }
@@ -184,7 +185,7 @@ public class NamedChunkGenerator extends ChunkGenerator {
     private static BlockState llama(int x, int y, int z) {
         if (y == -64) return Blocks.BEDROCK.defaultBlockState();
         if (y <  64)  return Blocks.STONE.defaultBlockState();
-        if (y == 64)  return Blocks.LIME_CARPET.defaultBlockState();
+        if (y == 64)  return Blocks.CARPET.pick(DyeColor.LIME).defaultBlockState();
         return null;
     }
 
@@ -203,7 +204,7 @@ public class NamedChunkGenerator extends ChunkGenerator {
         if (y == -64) return Blocks.BEDROCK.defaultBlockState();
         if (y == 64) {
             boolean dark = (Integer.bitCount(Math.abs(x) + Math.abs(z)) & 1) == 0;
-            return (dark ? Blocks.BLACK_CONCRETE : Blocks.WHITE_CONCRETE).defaultBlockState();
+            return Blocks.CONCRETE.pick(dark ? DyeColor.BLACK : DyeColor.WHITE).defaultBlockState();
         }
         if (y < 64) return y < 60 ? Blocks.STONE.defaultBlockState() : Blocks.DIRT.defaultBlockState();
         return null;
@@ -236,10 +237,10 @@ public class NamedChunkGenerator extends ChunkGenerator {
         if (y <  64)  return Blocks.DIRT.defaultBlockState();
         if (y == 64) {
             boolean px = x >= 0, pz = z >= 0;
-            if (px && pz)   return Blocks.BLUE_CONCRETE.defaultBlockState();
-            if (!px && pz)  return Blocks.RED_CONCRETE.defaultBlockState();
-            if (px)         return Blocks.GREEN_CONCRETE.defaultBlockState();
-            return Blocks.YELLOW_CONCRETE.defaultBlockState();
+            if (px && pz)   return Blocks.CONCRETE.pick(DyeColor.BLUE).defaultBlockState();
+            if (!px && pz)  return Blocks.CONCRETE.pick(DyeColor.RED).defaultBlockState();
+            if (px)         return Blocks.CONCRETE.pick(DyeColor.GREEN).defaultBlockState();
+            return Blocks.CONCRETE.pick(DyeColor.YELLOW).defaultBlockState();
         }
         return null;
     }

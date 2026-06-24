@@ -1,7 +1,9 @@
 package com.jrock.infinity.worldgen;
 
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
@@ -99,41 +101,42 @@ public final class InfinityBlockPalette {
 
         // Terracotta (uncoloured + all 16 colours)
         Blocks.TERRACOTTA,
-        Blocks.WHITE_TERRACOTTA,      Blocks.ORANGE_TERRACOTTA,
-        Blocks.MAGENTA_TERRACOTTA,    Blocks.LIGHT_BLUE_TERRACOTTA,
-        Blocks.YELLOW_TERRACOTTA,     Blocks.LIME_TERRACOTTA,
-        Blocks.PINK_TERRACOTTA,       Blocks.GRAY_TERRACOTTA,
-        Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.CYAN_TERRACOTTA,
-        Blocks.PURPLE_TERRACOTTA,     Blocks.BLUE_TERRACOTTA,
-        Blocks.BROWN_TERRACOTTA,      Blocks.GREEN_TERRACOTTA,
-        Blocks.RED_TERRACOTTA,        Blocks.BLACK_TERRACOTTA,
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.WHITE),      Blocks.DYED_TERRACOTTA.pick(DyeColor.ORANGE),
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.MAGENTA),    Blocks.DYED_TERRACOTTA.pick(DyeColor.LIGHT_BLUE),
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.YELLOW),     Blocks.DYED_TERRACOTTA.pick(DyeColor.LIME),
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.PINK),       Blocks.DYED_TERRACOTTA.pick(DyeColor.GRAY),
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.LIGHT_GRAY), Blocks.DYED_TERRACOTTA.pick(DyeColor.CYAN),
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.PURPLE),     Blocks.DYED_TERRACOTTA.pick(DyeColor.BLUE),
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.BROWN),      Blocks.DYED_TERRACOTTA.pick(DyeColor.GREEN),
+        Blocks.DYED_TERRACOTTA.pick(DyeColor.RED),        Blocks.DYED_TERRACOTTA.pick(DyeColor.BLACK),
 
         // Concrete (all 16 colours)
-        Blocks.WHITE_CONCRETE,      Blocks.ORANGE_CONCRETE,
-        Blocks.MAGENTA_CONCRETE,    Blocks.LIGHT_BLUE_CONCRETE,
-        Blocks.YELLOW_CONCRETE,     Blocks.LIME_CONCRETE,
-        Blocks.PINK_CONCRETE,       Blocks.GRAY_CONCRETE,
-        Blocks.LIGHT_GRAY_CONCRETE, Blocks.CYAN_CONCRETE,
-        Blocks.PURPLE_CONCRETE,     Blocks.BLUE_CONCRETE,
-        Blocks.BROWN_CONCRETE,      Blocks.GREEN_CONCRETE,
-        Blocks.RED_CONCRETE,        Blocks.BLACK_CONCRETE,
+        Blocks.CONCRETE.pick(DyeColor.WHITE),      Blocks.CONCRETE.pick(DyeColor.ORANGE),
+        Blocks.CONCRETE.pick(DyeColor.MAGENTA),    Blocks.CONCRETE.pick(DyeColor.LIGHT_BLUE),
+        Blocks.CONCRETE.pick(DyeColor.YELLOW),     Blocks.CONCRETE.pick(DyeColor.LIME),
+        Blocks.CONCRETE.pick(DyeColor.PINK),       Blocks.CONCRETE.pick(DyeColor.GRAY),
+        Blocks.CONCRETE.pick(DyeColor.LIGHT_GRAY), Blocks.CONCRETE.pick(DyeColor.CYAN),
+        Blocks.CONCRETE.pick(DyeColor.PURPLE),     Blocks.CONCRETE.pick(DyeColor.BLUE),
+        Blocks.CONCRETE.pick(DyeColor.BROWN),      Blocks.CONCRETE.pick(DyeColor.GREEN),
+        Blocks.CONCRETE.pick(DyeColor.RED),        Blocks.CONCRETE.pick(DyeColor.BLACK),
 
         // Wool (all 16 colours)
-        Blocks.WHITE_WOOL,      Blocks.ORANGE_WOOL,
-        Blocks.MAGENTA_WOOL,    Blocks.LIGHT_BLUE_WOOL,
-        Blocks.YELLOW_WOOL,     Blocks.LIME_WOOL,
-        Blocks.PINK_WOOL,       Blocks.GRAY_WOOL,
-        Blocks.LIGHT_GRAY_WOOL, Blocks.CYAN_WOOL,
-        Blocks.PURPLE_WOOL,     Blocks.BLUE_WOOL,
-        Blocks.BROWN_WOOL,      Blocks.GREEN_WOOL,
-        Blocks.RED_WOOL,        Blocks.BLACK_WOOL,
+        Blocks.WOOL.pick(DyeColor.WHITE),      Blocks.WOOL.pick(DyeColor.ORANGE),
+        Blocks.WOOL.pick(DyeColor.MAGENTA),    Blocks.WOOL.pick(DyeColor.LIGHT_BLUE),
+        Blocks.WOOL.pick(DyeColor.YELLOW),     Blocks.WOOL.pick(DyeColor.LIME),
+        Blocks.WOOL.pick(DyeColor.PINK),       Blocks.WOOL.pick(DyeColor.GRAY),
+        Blocks.WOOL.pick(DyeColor.LIGHT_GRAY), Blocks.WOOL.pick(DyeColor.CYAN),
+        Blocks.WOOL.pick(DyeColor.PURPLE),     Blocks.WOOL.pick(DyeColor.BLUE),
+        Blocks.WOOL.pick(DyeColor.BROWN),      Blocks.WOOL.pick(DyeColor.GREEN),
+        Blocks.WOOL.pick(DyeColor.RED),        Blocks.WOOL.pick(DyeColor.BLACK),
 
         // Mud family
         Blocks.MUD, Blocks.PACKED_MUD, Blocks.MUD_BRICKS,
 
         // Mineral / ore blocks
         Blocks.EMERALD_BLOCK,  Blocks.DIAMOND_BLOCK,  Blocks.GOLD_BLOCK,
-        Blocks.IRON_BLOCK,     Blocks.LAPIS_BLOCK,    Blocks.COPPER_BLOCK,
+        Blocks.IRON_BLOCK,     Blocks.LAPIS_BLOCK,
+        Blocks.COPPER_BLOCK.weathering().pick(WeatheringCopper.WeatherState.UNAFFECTED),
         Blocks.AMETHYST_BLOCK,
         Blocks.RAW_IRON_BLOCK, Blocks.RAW_GOLD_BLOCK, Blocks.RAW_COPPER_BLOCK,
 
@@ -175,24 +178,24 @@ public final class InfinityBlockPalette {
         Blocks.OCHRE_FROGLIGHT, Blocks.VERDANT_FROGLIGHT, Blocks.PEARLESCENT_FROGLIGHT,
 
         // Wool (all 16)
-        Blocks.WHITE_WOOL,      Blocks.ORANGE_WOOL,
-        Blocks.MAGENTA_WOOL,    Blocks.LIGHT_BLUE_WOOL,
-        Blocks.YELLOW_WOOL,     Blocks.LIME_WOOL,
-        Blocks.PINK_WOOL,       Blocks.GRAY_WOOL,
-        Blocks.LIGHT_GRAY_WOOL, Blocks.CYAN_WOOL,
-        Blocks.PURPLE_WOOL,     Blocks.BLUE_WOOL,
-        Blocks.BROWN_WOOL,      Blocks.GREEN_WOOL,
-        Blocks.RED_WOOL,        Blocks.BLACK_WOOL,
+        Blocks.WOOL.pick(DyeColor.WHITE),      Blocks.WOOL.pick(DyeColor.ORANGE),
+        Blocks.WOOL.pick(DyeColor.MAGENTA),    Blocks.WOOL.pick(DyeColor.LIGHT_BLUE),
+        Blocks.WOOL.pick(DyeColor.YELLOW),     Blocks.WOOL.pick(DyeColor.LIME),
+        Blocks.WOOL.pick(DyeColor.PINK),       Blocks.WOOL.pick(DyeColor.GRAY),
+        Blocks.WOOL.pick(DyeColor.LIGHT_GRAY), Blocks.WOOL.pick(DyeColor.CYAN),
+        Blocks.WOOL.pick(DyeColor.PURPLE),     Blocks.WOOL.pick(DyeColor.BLUE),
+        Blocks.WOOL.pick(DyeColor.BROWN),      Blocks.WOOL.pick(DyeColor.GREEN),
+        Blocks.WOOL.pick(DyeColor.RED),        Blocks.WOOL.pick(DyeColor.BLACK),
 
         // Concrete powder (all 16)
-        Blocks.WHITE_CONCRETE_POWDER,      Blocks.ORANGE_CONCRETE_POWDER,
-        Blocks.MAGENTA_CONCRETE_POWDER,    Blocks.LIGHT_BLUE_CONCRETE_POWDER,
-        Blocks.YELLOW_CONCRETE_POWDER,     Blocks.LIME_CONCRETE_POWDER,
-        Blocks.PINK_CONCRETE_POWDER,       Blocks.GRAY_CONCRETE_POWDER,
-        Blocks.LIGHT_GRAY_CONCRETE_POWDER, Blocks.CYAN_CONCRETE_POWDER,
-        Blocks.PURPLE_CONCRETE_POWDER,     Blocks.BLUE_CONCRETE_POWDER,
-        Blocks.BROWN_CONCRETE_POWDER,      Blocks.GREEN_CONCRETE_POWDER,
-        Blocks.RED_CONCRETE_POWDER,        Blocks.BLACK_CONCRETE_POWDER,
+        Blocks.CONCRETE_POWDER.pick(DyeColor.WHITE),      Blocks.CONCRETE_POWDER.pick(DyeColor.ORANGE),
+        Blocks.CONCRETE_POWDER.pick(DyeColor.MAGENTA),    Blocks.CONCRETE_POWDER.pick(DyeColor.LIGHT_BLUE),
+        Blocks.CONCRETE_POWDER.pick(DyeColor.YELLOW),     Blocks.CONCRETE_POWDER.pick(DyeColor.LIME),
+        Blocks.CONCRETE_POWDER.pick(DyeColor.PINK),       Blocks.CONCRETE_POWDER.pick(DyeColor.GRAY),
+        Blocks.CONCRETE_POWDER.pick(DyeColor.LIGHT_GRAY), Blocks.CONCRETE_POWDER.pick(DyeColor.CYAN),
+        Blocks.CONCRETE_POWDER.pick(DyeColor.PURPLE),     Blocks.CONCRETE_POWDER.pick(DyeColor.BLUE),
+        Blocks.CONCRETE_POWDER.pick(DyeColor.BROWN),      Blocks.CONCRETE_POWDER.pick(DyeColor.GREEN),
+        Blocks.CONCRETE_POWDER.pick(DyeColor.RED),        Blocks.CONCRETE_POWDER.pick(DyeColor.BLACK),
 
         // Misc chaos
         Blocks.SCULK, Blocks.SPONGE, Blocks.SLIME_BLOCK,
