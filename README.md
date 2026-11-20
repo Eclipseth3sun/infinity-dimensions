@@ -1,6 +1,6 @@
 <div align="center">
 
-# ∞ 𝔼𝕟𝕕𝕝𝕖𝕤𝕤 ℙ𝕠𝕣𝕥𝕒𝕝𝕤
+# ᦠ 𝔼𝕟𝕕𝕝𝕖𝕤𝕤 ℙ𝕠𝕣𝕥𝕒𝕝𝕤
 
 **Throw a book into a Nether Portal. Walk into a world written by its words.**
 
