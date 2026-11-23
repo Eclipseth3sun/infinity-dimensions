@@ -1,6 +1,8 @@
 {
   "block.infinity_dimensions.box_of_infinite_books": "Box of Infinite Books",
   "item.infinity_dimensions.box_of_infinite_books": "Box of Infinite Books",
+  "block.infinity_dimensions.rainbow_bookshelf": "Rainbow Infinite Bookshelf",
+  "item.infinity_dimensions.rainbow_bookshelf": "Rainbow Infinite Bookshelf",
   "block.infinity_dimensions.infinity_portal": "Infinity Portal",
 
   "dimension.infinity_dimensions.ant":         "The Ant Dimension",

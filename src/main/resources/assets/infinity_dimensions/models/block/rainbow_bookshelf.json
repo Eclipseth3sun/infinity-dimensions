@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end":  "infinity_dimensions:block/rainbow_bookshelf_top",
+    "side": "infinity_dimensions:block/rainbow_bookshelf_side"
+  }
+}

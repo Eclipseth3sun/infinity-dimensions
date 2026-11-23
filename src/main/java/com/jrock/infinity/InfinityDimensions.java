@@ -1,6 +1,7 @@
 package com.jrock.infinity;
 
 import com.jrock.infinity.block.ModBlocks;
+import com.jrock.infinity.block.PortalBreakHandler;
 import com.jrock.infinity.dimension.InfinityDimensionManager;
 import com.jrock.infinity.item.ModItems;
 import com.jrock.infinity.worldgen.InfinityBiomeSource;
@@ -21,6 +22,9 @@ public class InfinityDimensions implements ModInitializer {
     public void onInitialize() {
         ModBlocks.register();
         ModItems.register();
+
+        // Breaking any Infinity Portal block (or its frame) removes the whole portal at once.
+        PortalBreakHandler.register();
 
         InfinityBiomeSource.register();
         InfinityChunkGenerator.register();

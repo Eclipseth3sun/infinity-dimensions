@@ -13,6 +13,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -22,6 +23,7 @@ public final class ModBlocks {
 
     public static Block BOX_OF_INFINITE_BOOKS;
     public static Block INFINITY_PORTAL;
+    public static Block RAINBOW_BOOKSHELF;
     public static BlockEntityType<BoxOfInfiniteBooksBlockEntity> BOX_OF_INFINITE_BOOKS_BLOCK_ENTITY;
     public static BlockEntityType<InfinityPortalBlockEntity>    INFINITY_PORTAL_BLOCK_ENTITY;
 
@@ -40,6 +42,17 @@ public final class ModBlocks {
                 Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, "box_of_infinite_books"),
                 FabricBlockEntityTypeBuilder.create(
                         BoxOfInfiniteBooksBlockEntity::new, BOX_OF_INFINITE_BOOKS).build());
+
+        // Rainbow Infinite Bookshelf: right-click for a unique, signed, rainbow-ink book, forever.
+        // No block entity needed - the never-repeat counter lives in world SavedData (RainbowShelfData).
+        // Uses the normal loot table (data/infinity_dimensions/loot_table/blocks/rainbow_bookshelf.json).
+        RAINBOW_BOOKSHELF = registerWithItem("rainbow_bookshelf", key ->
+                new RainbowBookshelfBlock(BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.WOOD)
+                        .strength(1.5f)
+                        .sound(SoundType.WOOD)
+                        .lightLevel(state -> 8)   // it glows a little, like a rainbow should
+                        .setId(key)));
 
         // InfinityPortalBlock is world-generated only — no BlockItem.
         ResourceKey<Block> portalKey = blockKey("infinity_portal");
@@ -60,6 +73,9 @@ public final class ModBlocks {
 
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(output ->
                 output.accept(new ItemStack(BOX_OF_INFINITE_BOOKS))
+        );
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(output ->
+                output.accept(new ItemStack(RAINBOW_BOOKSHELF))
         );
     }
 
