@@ -27,11 +27,21 @@ def R(desc, a, b, *_): return (desc, a, b, True)
 # ---- gradle.properties ------------------------------------------------------
 edit(root / "gradle.properties", [
     R("minecraft_version", r"minecraft_version=[^\n]*", "minecraft_version=26.3"),
-    R("loader_version",    r"loader_version=[^\n]*",    "loader_version=0.19.5"),
+    R("loader_version",    r"loader_version=[^\n]*",    "loader_version=0.20.1"),
     R("loom_version",      r"loom_version=[^\n]*",      "loom_version=1.18-SNAPSHOT"),
-    R("fabric_api_version", r"fabric_api_version=[^\n]*", "fabric_api_version=0.161.0+26.3"),
+    R("fabric_api_version", r"fabric_api_version=[^\n]*", "fabric_api_version=0.166.2+26.3"),
     R("mod_version",       r"mod_version=[^\n]*",       "mod_version=1.2.0+mc26.3"),
     R("api comment",       r"# Fabric API 0\.153\.0[^\n]*", "# Fabric API for 26.3 - verify latest at https://fabricmc.net/develop/"),
+])
+
+edit(root / "gradle/wrapper/gradle-wrapper.properties", [
+    R("Gradle 9.7", r"gradle-[0-9.]+-bin\.zip", "gradle-9.7.0-bin.zip"),
+])
+
+# ---- fabric.mod.json --------------------------------------------------------
+edit(root / "src/main/resources/fabric.mod.json", [
+    S("fabricloader", "\"fabricloader\": \">=0.19.2\"", "\"fabricloader\": \">=0.20.1\""),
+    S("minecraft", "\"minecraft\": \"26.1.2\"", "\"minecraft\": \"26.3\""),
 ])
 
 # ---- chunk generators (identical changes) -----------------------------------

@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.WrittenBookContent;
@@ -146,7 +147,7 @@ public class BoxOfInfiniteBooksBlock extends Block implements EntityBlock {
                                           BlockPos pos, Player player, InteractionHand hand,
                                           net.minecraft.world.phys.BlockHitResult hit) {
         // Not an echo shard — fall through to useWithoutItem (book dispensing).
-        // TRY_WITH_EMPTY_HAND is required in MC 26.1.2: PASS alone no longer triggers
+        // TRY_WITH_EMPTY_HAND is required in MC 26.x: PASS alone no longer triggers
         // useWithoutItem as a fallback.
         if (!stack.is(Items.ECHO_SHARD)) return InteractionResult.TRY_WITH_EMPTY_HAND;
         if (level.isClientSide()) return InteractionResult.SUCCESS;
@@ -183,7 +184,7 @@ public class BoxOfInfiniteBooksBlock extends Block implements EntityBlock {
 
         ItemStack book = generateBook(seed);
         if (!player.getInventory().add(book)) {
-            player.drop(book, false);
+            player.spawnAtLocation((ServerLevel) world, book);
         }
 
         world.playSound(null, pos, SoundEvents.BOOK_PUT,
@@ -200,7 +201,7 @@ public class BoxOfInfiniteBooksBlock extends Block implements EntityBlock {
      * Creative-mode players receive no drop, matching vanilla block-breaking behaviour.
      */
     @Override
-    public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state,
+    public void playerDestroy(ServerLevel level, ServerPlayer player, BlockPos pos, BlockState state,
                               @Nullable BlockEntity blockEntity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, blockEntity, tool); // loot table is empty
         if (!level.isClientSide() && !player.isCreative()) {

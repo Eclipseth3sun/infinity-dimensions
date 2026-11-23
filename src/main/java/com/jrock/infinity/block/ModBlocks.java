@@ -48,7 +48,7 @@ public final class ModBlocks {
                         .noCollision()
                         .lightLevel(state -> 11)
                         .strength(-1.0f)
-                        .pushReaction(PushReaction.BLOCK)
+                        .pushReaction(PushReaction.IMMOVEABLE)
                         .noLootTable()
                         .setId(portalKey)));
 

@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
 
@@ -75,10 +76,10 @@ public class InfinityBiomeSource extends BiomeSource {
     protected MapCodec<? extends BiomeSource> codec() { return CODEC; }
 
     @Override
-    public Holder<Biome> getNoiseBiome(int x, int y, int z, Climate.Sampler sampler) {
+    public BiomeResolver createResolver(Climate.Sampler sampler) {
         if (biome == null) throw new IllegalStateException(
                 "InfinityBiomeSource not fully initialised (seed=" + seed + ")");
-        return biome;
+        return (x, y, z) -> biome;
     }
 
     @Override

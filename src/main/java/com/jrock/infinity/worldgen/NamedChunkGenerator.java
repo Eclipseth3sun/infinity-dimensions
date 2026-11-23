@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Blocks;
@@ -23,8 +25,11 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -60,16 +65,11 @@ public class NamedChunkGenerator extends ChunkGenerator {
     protected MapCodec<? extends ChunkGenerator> codec() { return CODEC; }
 
     @Override
-    public void applyCarvers(WorldGenRegion region, long seed, RandomState randomState,
-                             BiomeManager biomeManager, StructureManager structures, ChunkAccess chunk) { }
-
-    @Override
-    public void buildSurface(WorldGenRegion region, StructureManager structures,
-                             RandomState randomState, ChunkAccess chunk) { }
-
-    @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState,
-                                                        StructureManager structures, ChunkAccess chunk) {
+    public CompletableFuture<ChunkAccess> buildTerrain(ChunkAccess chunk, Blender blender,
+                                                       RandomState randomState, StructureManager structures,
+                                                       BiomeManager biomeManager,
+                                                       @Nullable WorldGenRegion carverBiomeRegion,
+                                                       Set<Holder<Biome>> possibleBiomes) {
         BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
         int x0 = chunk.getPos().getMinBlockX(), z0 = chunk.getPos().getMinBlockZ();
 
@@ -104,7 +104,7 @@ public class NamedChunkGenerator extends ChunkGenerator {
     public void spawnOriginalMobs(WorldGenRegion region) { }
 
     @Override
-    public void addDebugScreenInfo(List<String> text, RandomState cfg, BlockPos pos) {
+    public void addDebugScreenInfo(List<String> text, RandomState cfg, BlockPos pos, SamplerContext samplerContext) {
         text.add("NamedGen theme=" + theme.getId());
     }
 
