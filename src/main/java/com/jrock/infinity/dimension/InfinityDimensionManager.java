@@ -1,9 +1,9 @@
 package com.jrock.infinity.dimension;
 
 import com.google.common.collect.ImmutableList;
-import com.jrock.infinity.InfinityDimensions;
-import com.jrock.infinity.block.InfinityPortalBlock;
-import com.jrock.infinity.block.InfinityPortalBlockEntity;
+import com.jrock.infinity.EndlessPortals;
+import com.jrock.infinity.block.EndlessPortalBlock;
+import com.jrock.infinity.block.EndlessPortalBlockEntity;
 import com.jrock.infinity.block.ModBlocks;
 import com.jrock.infinity.mixin.MinecraftServerAccessor;
 import com.jrock.infinity.worldgen.InfinityBiomeSource;
@@ -44,7 +44,7 @@ import java.util.Set;
  *
  * - On server start: re-registers every procedural dimension persisted in InfinityWorldData.
  * - On book-thrown-in-portal: derives the dimension ID, ensures the world exists,
- *   converts the portal frame to InfinityPortalBlocks.
+ *   converts the portal frame to EndlessPortalBlocks.
  * - On teleport request: finds or creates the target ServerLevel and sends the player there.
  *
  * <h3>Thread-safety note</h3>
@@ -54,7 +54,7 @@ import java.util.Set;
  * {@code tickChildren()} is iterating it (→ CME).  Instead we enqueue into
  * {@link #PENDING_CREATIONS} and drain it in {@link #processPendingCreations()}, which is
  * called from a {@code ServerTickEvents.END_SERVER_TICK} listener registered in
- * {@link com.jrock.infinity.InfinityDimensions} — guaranteed to run after
+ * {@link com.jrock.infinity.EndlessPortals} — guaranteed to run after
  * {@code tickChildren()} completes.
  */
 public final class InfinityDimensionManager {
@@ -104,7 +104,7 @@ public final class InfinityDimensionManager {
         // preventing players from being ejected to overworld spawn on rejoin.
         processPendingCreations();
 
-        InfinityDimensions.LOGGER.info("Infinity Dimensions: {} world(s) active.", ACTIVE_KEYS.size());
+        EndlessPortals.LOGGER.info("Endless Portals: {} world(s) active.", ACTIVE_KEYS.size());
     }
 
     public static void onServerStop(MinecraftServer srv) {
@@ -133,7 +133,7 @@ public final class InfinityDimensionManager {
             } else {
                 // Creation failed — remove the optimistic key so it can be retried.
                 ACTIVE_KEYS.remove(hexId);
-                InfinityDimensions.LOGGER.error("Failed to create procedural dimension '{}'", hexId);
+                EndlessPortals.LOGGER.error("Failed to create procedural dimension '{}'", hexId);
             }
         }
     }
@@ -180,13 +180,13 @@ public final class InfinityDimensionManager {
             key = ACTIVE_KEYS.get(dimensionId);
         }
         if (key == null) {
-            InfinityDimensions.LOGGER.warn("Dimension '{}' could not be created.", dimensionId);
+            EndlessPortals.LOGGER.warn("Dimension '{}' could not be created.", dimensionId);
             return;
         }
 
         ServerLevel target = server.getLevel(key);
         if (target == null) {
-            InfinityDimensions.LOGGER.warn("ServerLevel for '{}' is null — creation may be pending.", dimensionId);
+            EndlessPortals.LOGGER.warn("ServerLevel for '{}' is null — creation may be pending.", dimensionId);
             return;
         }
 
@@ -275,7 +275,7 @@ public final class InfinityDimensionManager {
             accessor.getLevels().put(key, world);
             return world;
         } catch (Exception e) {
-            InfinityDimensions.LOGGER.error("Failed to create infinity dimension '{}'", key, e);
+            EndlessPortals.LOGGER.error("Failed to create infinity dimension '{}'", key, e);
             return null;
         }
     }
@@ -290,14 +290,14 @@ public final class InfinityDimensionManager {
                 .getOptionalValue(net.minecraft.world.level.block.NetherPortalBlock.AXIS)
                 .orElse(Direction.Axis.X);
 
-        BlockState portalState = ModBlocks.INFINITY_PORTAL.defaultBlockState()
-                .setValue(InfinityPortalBlock.AXIS, axis)
-                .setValue(InfinityPortalBlock.COLOR, InfinityPortalBlock.colorIndexForId(dimensionId));
+        BlockState portalState = ModBlocks.ENDLESS_PORTAL.defaultBlockState()
+                .setValue(EndlessPortalBlock.AXIS, axis)
+                .setValue(EndlessPortalBlock.COLOR, EndlessPortalBlock.colorIndexForId(dimensionId));
 
         for (BlockPos pos : frame) {
             world.setBlock(pos, portalState, 3);
             BlockEntity be = world.getBlockEntity(pos);
-            if (be instanceof InfinityPortalBlockEntity portal) {
+            if (be instanceof EndlessPortalBlockEntity portal) {
                 portal.setDimensionId(dimensionId);
             }
         }
@@ -319,7 +319,7 @@ public final class InfinityDimensionManager {
 
     private static ResourceKey<Level> worldKey(String id) {
         return ResourceKey.create(Registries.DIMENSION,
-                Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, id));
+                Identifier.fromNamespaceAndPath(EndlessPortals.MOD_ID, id));
     }
 
     private static long hexToSeed(String hex) {

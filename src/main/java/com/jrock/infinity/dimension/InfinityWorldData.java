@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * Persists the set of procedural dimension IDs across server restarts.
  *
- * Stored in {@code world/data/infinity_dimensions.dat}.
+ * Stored in {@code world/data/endless_portals.dat}.
  */
 public class InfinityWorldData extends SavedData {
 
@@ -33,7 +33,7 @@ public class InfinityWorldData extends SavedData {
     );
 
     public static final SavedDataType<InfinityWorldData> TYPE = new SavedDataType<>(
-            Identifier.fromNamespaceAndPath("infinity_dimensions", "infinity_dimensions"),
+            Identifier.fromNamespaceAndPath("endless_portals", "endless_portals"),
             InfinityWorldData::new,
             CODEC,
             DataFixTypes.LEVEL

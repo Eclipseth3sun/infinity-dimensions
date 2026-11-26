@@ -1,5 +1,6 @@
 package com.jrock.infinity.block;
 
+import com.jrock.infinity.EndlessPortals;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Makes Infinity Portals behave like a single object when they are broken.
+ * Makes Endless Portals behave like a single object when they are broken.
  *
  * <p>Before: breaking one portal block removed only that block, leaving a ragged, still-working portal.
  * <br>Now:
@@ -43,9 +44,9 @@ public final class PortalBreakHandler {
             if (!(level instanceof ServerLevel server)) return;
 
             List<BlockPos> seeds = new ArrayList<>(6);
-            if (state.is(ModBlocks.INFINITY_PORTAL)) {
+            if (state.is(ModBlocks.ENDLESS_PORTAL)) {
                 // The broken block is already gone: seed from its in-plane neighbours.
-                Direction.Axis axis = state.getValue(InfinityPortalBlock.AXIS);
+                Direction.Axis axis = state.getValue(EndlessPortalBlock.AXIS);
                 for (Direction d : Direction.values()) {
                     if (inPlane(d, axis)) seeds.add(pos.relative(d).immutable());
                 }
@@ -55,13 +56,19 @@ public final class PortalBreakHandler {
                     BlockPos neighbour = pos.relative(d).immutable();
                     BlockState ns = server.getBlockState(neighbour);
                     // Only counts as a frame block when it sits IN the portal's plane, not in front of / behind it.
-                    if (ns.is(ModBlocks.INFINITY_PORTAL)
-                            && inPlane(d.getOpposite(), ns.getValue(InfinityPortalBlock.AXIS))) {
+                    if (ns.is(ModBlocks.ENDLESS_PORTAL)
+                            && inPlane(d.getOpposite(), ns.getValue(EndlessPortalBlock.AXIS))) {
                         seeds.add(neighbour);
                     }
                 }
             }
-            if (!seeds.isEmpty()) removeConnected(server, pos, seeds);
+            if (seeds.isEmpty()) return;
+            try {
+                removeConnected(server, pos, seeds);
+            } catch (RuntimeException e) {
+                // Never let a portal-cleanup problem crash the server or the player's break action.
+                EndlessPortals.LOGGER.error("Failed to remove portal near {}", pos, e);
+            }
         });
     }
 
@@ -70,24 +77,24 @@ public final class PortalBreakHandler {
         return d.getAxis() == Direction.Axis.Y || d.getAxis() == axis;
     }
 
-    /** Removes every Infinity Portal block connected (within its plane) to any of the seeds. */
+    /** Removes every Endless Portal block connected (within its plane) to any of the seeds. */
     private static void removeConnected(ServerLevel level, BlockPos origin, List<BlockPos> seeds) {
         Deque<BlockPos> queue = new ArrayDeque<>();
         Set<BlockPos> seen = new HashSet<>();
         List<BlockPos> found = new ArrayList<>();
 
         for (BlockPos s : seeds) {
-            if (level.getBlockState(s).is(ModBlocks.INFINITY_PORTAL) && seen.add(s)) queue.add(s);
+            if (level.getBlockState(s).is(ModBlocks.ENDLESS_PORTAL) && seen.add(s)) queue.add(s);
         }
 
         while (!queue.isEmpty() && found.size() < MAX_BLOCKS) {
             BlockPos p = queue.poll();
             found.add(p);
-            Direction.Axis axis = level.getBlockState(p).getValue(InfinityPortalBlock.AXIS);
+            Direction.Axis axis = level.getBlockState(p).getValue(EndlessPortalBlock.AXIS);
             for (Direction d : Direction.values()) {
                 if (!inPlane(d, axis)) continue;
                 BlockPos n = p.relative(d).immutable();
-                if (seen.add(n) && level.getBlockState(n).is(ModBlocks.INFINITY_PORTAL)) queue.add(n);
+                if (seen.add(n) && level.getBlockState(n).is(ModBlocks.ENDLESS_PORTAL)) queue.add(n);
             }
         }
 

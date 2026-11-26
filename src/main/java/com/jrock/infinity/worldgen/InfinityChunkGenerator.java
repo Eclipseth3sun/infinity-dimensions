@@ -1,6 +1,6 @@
 package com.jrock.infinity.worldgen;
 
-import com.jrock.infinity.InfinityDimensions;
+import com.jrock.infinity.EndlessPortals;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -67,17 +67,28 @@ public class InfinityChunkGenerator extends ChunkGenerator {
     private final long seed;
     private final int style;
     private final InfinityBlockPalette palette;
+    private final ChaosTerrain chaos;          // non-null when this dimension uses a chaos style
+    private final BlockState[] chaosStates;
 
     public InfinityChunkGenerator(BiomeSource biomeSource, long seed) {
         super(biomeSource);
         this.seed    = seed;
-        this.style   = (int) (Math.abs(seed) % NUM_STYLES);
+        long chaosRoll = ChaosTerrain.mix(seed ^ 0x5DEECE66DL);
+        boolean chaotic = ((chaosRoll >>> 40) & 0xFF) < ChaosTerrain.CHAOS_CHANCE_256;
+        // ~65% of dimensions are chaotic (styles 18+); the rest keep their classic style.
+        this.style   = chaotic
+                ? NUM_STYLES + (int) (((chaosRoll >>> 8) & 0x7FFFFFFFL) % ChaosTerrain.STYLE_COUNT)
+                : (int) (Math.abs(seed) % NUM_STYLES);
+        this.chaos   = style >= NUM_STYLES ? new ChaosTerrain(seed, style - NUM_STYLES) : null;
         this.palette = new InfinityBlockPalette(seed);
+        this.chaosStates = chaos != null
+                ? ChaosPalette.build(seed, palette.primary(), palette.surface(), palette.subsurface())
+                : null;
     }
 
     public static void register() {
         Registry.register(BuiltInRegistries.CHUNK_GENERATOR,
-                Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, "infinity"),
+                Identifier.fromNamespaceAndPath(EndlessPortals.MOD_ID, "infinity"),
                 CODEC);
     }
 
@@ -92,6 +103,8 @@ public class InfinityChunkGenerator extends ChunkGenerator {
                                                        BiomeManager biomeManager,
                                                        @Nullable WorldGenRegion carverBiomeRegion,
                                                        Set<Holder<Biome>> possibleBiomes) {
+        if (chaos != null) return fillChaos(chunk);
+
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         int x0 = chunk.getPos().getMinBlockX();
         int z0 = chunk.getPos().getMinBlockZ();
@@ -119,6 +132,17 @@ public class InfinityChunkGenerator extends ChunkGenerator {
     public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor world, RandomState randomState) {
         int height = world.getHeight();
         int bottom = world.getMinY();
+        if (chaos != null) {
+            int[] col = new int[ChaosTerrain.HEIGHT];
+            chaos.column(x, z, col);
+            BlockState[] states = new BlockState[height];
+            for (int i = 0; i < height; i++) {
+                int idx = bottom + i - ChaosTerrain.MIN_Y;
+                states[i] = idx >= 0 && idx < col.length
+                        ? chaosStates[col[idx]] : Blocks.AIR.defaultBlockState();
+            }
+            return new NoiseColumn(bottom, states);
+        }
         BlockState[] column = new BlockState[height];
         int surfaceY = getSurfaceY(x, z);
 
@@ -145,6 +169,7 @@ public class InfinityChunkGenerator extends ChunkGenerator {
     // ── Style dispatch ────────────────────────────────────────────────────────
 
     private int getSurfaceY(int x, int z) {
+        if (chaos != null) return chaos.surfaceY(x, z);
         return switch (style) {
             case 1  -> 64 + (int) (simplexHeight(x, z, seed, 0.015) * 16);
             case 2  -> 60 + (int) (simplexHeight(x, z, seed, 0.008) * 50);
@@ -423,4 +448,26 @@ public class InfinityChunkGenerator extends ChunkGenerator {
 
     private static double smooth(double t) { return t * t * (3 - 2 * t); }
     private static double lerp(double a, double b, double t) { return a + t * (b - a); }
+
+    // ── Chaos terrain (styles 18+) ────────────────────────────────────────────
+
+    private CompletableFuture<ChunkAccess> fillChaos(ChunkAccess chunk) {
+        int[] col = new int[ChaosTerrain.HEIGHT];
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+        int x0 = chunk.getPos().getMinBlockX();
+        int z0 = chunk.getPos().getMinBlockZ();
+        for (int lx = 0; lx < 16; lx++) {
+            for (int lz = 0; lz < 16; lz++) {
+                chaos.column(x0 + lx, z0 + lz, col);
+                for (int i = 0; i < ChaosTerrain.HEIGHT; i++) {
+                    int material = col[i];
+                    if (material == ChaosTerrain.AIR) continue;
+                    int y = ChaosTerrain.MIN_Y + i;
+                    if (y < getMinY() || y >= getMinY() + getGenDepth()) continue;
+                    chunk.setBlockState(mutable.set(x0 + lx, y, z0 + lz), chaosStates[material], 0);
+                }
+            }
+        }
+        return CompletableFuture.completedFuture(chunk);
+    }
 }

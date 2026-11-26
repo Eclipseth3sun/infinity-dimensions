@@ -1,0 +1,44 @@
+name: Apply Endless Portals update
+
+# Optional one-click helper for people who edit the repo through the GitHub website.
+# Run it from the Actions tab: it applies tools/apply_update.py and pushes the result to a
+# NEW branch (endless-portals-update). Open a pull request from that branch to review it;
+# the Build workflow then compiles and smoke-tests the PR before you merge.
+on:
+  workflow_dispatch:
+    inputs:
+      keep_ids:
+        description: 'Keep the old mod id / block id (save-compatible). Leave OFF to rename everything to endless_portals.'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply update script
+        run: |
+          if [ "${{ inputs.keep_ids }}" = "true" ]; then
+            python3 tools/apply_update.py --keep-ids
+          else
+            python3 tools/apply_update.py
+          fi
+
+      - name: Commit to a new branch
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B endless-portals-update
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit - the update is already applied." >> "$GITHUB_STEP_SUMMARY"
+          else
+            git commit -m "Endless Portals update: 26.3 port, fabric.mod.json fix, rainbow portals, bookshelf"
+            git push --force origin endless-portals-update
+            echo "Pushed branch **endless-portals-update**. Open a pull request from it to run the Build workflow." >> "$GITHUB_STEP_SUMMARY"
+          fi

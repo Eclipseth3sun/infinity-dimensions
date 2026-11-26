@@ -36,7 +36,7 @@ public class RainbowShelfData extends SavedData {
     ).apply(inst, RainbowShelfData::new));
 
     public static final SavedDataType<RainbowShelfData> TYPE = new SavedDataType<>(
-            Identifier.fromNamespaceAndPath("infinity_dimensions", "rainbow_bookshelf"),
+            Identifier.fromNamespaceAndPath("endless_portals", "rainbow_bookshelf"),
             () -> new RainbowShelfData(0L, new SecureRandom().nextLong()),
             CODEC,
             DataFixTypes.LEVEL

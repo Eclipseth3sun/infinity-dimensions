@@ -1,6 +1,6 @@
 package com.jrock.infinity.mixin;
 
-import com.jrock.infinity.InfinityDimensions;
+import com.jrock.infinity.EndlessPortals;
 import net.minecraft.server.level.ServerLevel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +22,7 @@ public abstract class WeatherCycleMixin {
     @Inject(method = "advanceWeatherCycle", at = @At("HEAD"), cancellable = true)
     private void infinityDimensions$skipRedundantWeatherCycle(CallbackInfo ci) {
         ServerLevel self = (ServerLevel) (Object) this;
-        if (self.dimension().identifier().getNamespace().equals(InfinityDimensions.MOD_ID)) {
+        if (self.dimension().identifier().getNamespace().equals(EndlessPortals.MOD_ID)) {
             ci.cancel();
         }
     }

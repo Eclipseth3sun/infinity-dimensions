@@ -2,36 +2,139 @@ name: Build
 
 on:
   push:
+    branches: [main]
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
+  # ------------------------------------------------------------------ compile + package
   build:
+    name: Build & package
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 25
+          java-version: '25'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v4
 
       - name: Build
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build --stacktrace
 
-      - name: Upload mod JAR
+      - name: Package zip (jar + README + install notes)
+        run: bash tools/package.sh
+
+      - name: Upload distributable zip
         uses: actions/upload-artifact@v4
         with:
-          name: infinity-dimensions
-          path: |
-            build/libs/*.jar
-            !build/libs/*-sources.jar
+          name: EndlessPortals-zip
+          path: dist/EndlessPortals-*.zip
           if-no-files-found: error
+
+      - name: Upload bare jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: EndlessPortals-jar
+          path: |
+            dist/*.jar
+          if-no-files-found: error
+
+  # ------------------------------------------------------------------ boot a real server
+  # Catches the class of bug that makes the mod crash at startup (bad fabric.mod.json,
+  # registry errors, broken data/resources, mixin failures) BEFORE anyone downloads it.
+  smoke-test:
+    name: Smoke test (boot a dev server)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Start the server and wait for "Done"
+        run: |
+          chmod +x gradlew
+          mkdir -p run
+          echo "eula=true" > run/eula.txt
+          printf 'online-mode=false\nview-distance=4\nspawn-protection=0\n' > run/server.properties
+
+          ./gradlew runServer --no-daemon > server.log 2>&1 &
+          GRADLE_PID=$!
+
+          STARTED=0
+          for i in $(seq 1 120); do                       # up to ~10 minutes (first run downloads Minecraft)
+            if grep -q 'Done (' server.log; then STARTED=1; break; fi
+            if ! kill -0 "$GRADLE_PID" 2>/dev/null; then break; fi
+            sleep 5
+          done
+
+          kill "$GRADLE_PID" 2>/dev/null || true
+          pkill -f 'KnotServer' 2>/dev/null || true
+          sleep 3
+
+          {
+            echo "### Smoke test"
+            if [ "$STARTED" = "1" ]; then echo "Server booted successfully."; else echo "**Server did not finish starting.** Last 60 log lines:"; fi
+            echo '```'; tail -n 60 server.log; echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$STARTED" != "1" ]; then
+            echo "::error::The dev server never reached 'Done' - see the job summary and the uploaded server.log"
+            exit 1
+          fi
+          if grep -Eqi 'incompatible mod set|Encountered an unexpected exception|crash report' server.log; then
+            echo "::error::Startup logged a fatal error - see server.log"
+            exit 1
+          fi
+
+      - name: Upload server log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-server-log
+          path: |
+            server.log
+            run/logs/latest.log
+            run/crash-reports/
+          if-no-files-found: ignore
+
+  # ------------------------------------------------------------------ publish on tag
+  release:
+    name: Publish release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [build, smoke-test]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: EndlessPortals-zip
+          path: release
+      - uses: actions/download-artifact@v4
+        with:
+          name: EndlessPortals-jar
+          path: release
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true

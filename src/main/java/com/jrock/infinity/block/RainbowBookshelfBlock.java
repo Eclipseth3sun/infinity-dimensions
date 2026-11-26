@@ -1,5 +1,6 @@
 package com.jrock.infinity.block;
 
+import com.jrock.infinity.EndlessPortals;
 import com.jrock.infinity.dimension.RainbowShelfData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
@@ -10,7 +11,6 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.network.Filterable;
-import net.minecraft.util.Prediction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -55,15 +55,23 @@ public class RainbowBookshelfBlock extends Block {
         if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (!(level instanceof ServerLevel server)) return InteractionResult.PASS;
 
-        RainbowShelfData data = server.getServer().getDataStorage().computeIfAbsent(RainbowShelfData.TYPE);
-        long serial = data.nextSerial(); // never handed out twice, ever, in this world
+        try {
+            RainbowShelfData data = server.getServer().getDataStorage().computeIfAbsent(RainbowShelfData.TYPE);
+            long serial = data.nextSerial(); // never handed out twice, ever, in this world
 
-        RainbowBookGenerator.BookText text = RainbowBookGenerator.generate(
-                data.getSalt(), serial, ThreadLocalRandom.current().nextLong());
-        ItemStack book = createSignedBook(text, serial);
+            RainbowBookGenerator.BookText text = RainbowBookGenerator.generate(
+                    data.getSalt(), serial, ThreadLocalRandom.current().nextLong());
+            ItemStack book = createSignedBook(text, serial);
 
-        if (!player.getInventory().add(book)) {
-            player.drop(book, false, Prediction.SERVER_ONLY);
+            // Entity#spawnAtLocation(ServerLevel, ItemStack) exists on 26.2 and 26.3;
+            // the old Player#drop(ItemStack, boolean) was removed in 26.3.
+            if (!player.getInventory().add(book)) {
+                player.spawnAtLocation(server, book);
+            }
+        } catch (RuntimeException e) {
+            // A bookshelf problem must never take the server down.
+            EndlessPortals.LOGGER.error("Rainbow bookshelf failed to produce a book at {}", pos, e);
+            return InteractionResult.PASS;
         }
 
         server.playSound(null, pos, SoundEvents.BOOK_PUT, SoundSource.BLOCKS,

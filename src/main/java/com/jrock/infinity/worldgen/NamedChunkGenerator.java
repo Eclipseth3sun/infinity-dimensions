@@ -1,6 +1,6 @@
 package com.jrock.infinity.worldgen;
 
-import com.jrock.infinity.InfinityDimensions;
+import com.jrock.infinity.EndlessPortals;
 import com.jrock.infinity.dimension.NamedDimension;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Single parameterised chunk generator for all named easter-egg dimensions.
- * Registered as "infinity_dimensions:named".
+ * Registered as "endless_portals:named".
  */
 public class NamedChunkGenerator extends ChunkGenerator {
 
@@ -55,7 +55,7 @@ public class NamedChunkGenerator extends ChunkGenerator {
 
     public static void register() {
         Registry.register(BuiltInRegistries.CHUNK_GENERATOR,
-                Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, "named"),
+                Identifier.fromNamespaceAndPath(EndlessPortals.MOD_ID, "named"),
                 CODEC);
     }
 

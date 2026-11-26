@@ -15,7 +15,7 @@ import java.util.Random;
  * Every book is derived from a {@code serial} number that the world hands out exactly once
  * (see {@code RainbowShelfData}: a persisted, ever-increasing counter shared by <i>all</i>
  * rainbow bookshelves in the world). The serial is written into the book's text itself — in
- * the title and in a colophon on the final page — and Infinity Dimensions derives a book's
+ * the title and in a colophon on the final page — and Endless Portals derives a book's
  * dimension from an MD5 of its page text. Two different serials therefore always yield two
  * different page texts (and so two different dimensions), no matter what the random prose
  * rolls turn out to be. The random prose only decides how the book <i>reads</i>.

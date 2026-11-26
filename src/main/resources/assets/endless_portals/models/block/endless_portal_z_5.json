@@ -1,0 +1,6 @@
+﻿{
+  "parent": "endless_portals:block/endless_portal_z",
+  "textures": {
+    "portal": "endless_portals:block/endless_portal_soul_blue"
+  }
+}

@@ -1,0 +1,11 @@
+﻿{
+    "type":  "endless_portals:skygrid",
+    "generator":  {
+                      "type":  "endless_portals:named",
+                      "theme":  "skygrid",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

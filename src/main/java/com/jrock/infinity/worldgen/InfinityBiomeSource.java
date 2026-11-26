@@ -1,6 +1,6 @@
 package com.jrock.infinity.worldgen;
 
-import com.jrock.infinity.InfinityDimensions;
+import com.jrock.infinity.EndlessPortals;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -91,7 +91,7 @@ public class InfinityBiomeSource extends BiomeSource {
 
     public static void register() {
         Registry.register(BuiltInRegistries.BIOME_SOURCE,
-                Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, "infinity"),
+                Identifier.fromNamespaceAndPath(EndlessPortals.MOD_ID, "infinity"),
                 CODEC);
     }
 

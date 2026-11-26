@@ -1,6 +1,6 @@
 package com.jrock.infinity.block;
 
-import com.jrock.infinity.InfinityDimensions;
+import com.jrock.infinity.EndlessPortals;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
@@ -22,10 +22,10 @@ import net.minecraft.world.level.material.PushReaction;
 public final class ModBlocks {
 
     public static Block BOX_OF_INFINITE_BOOKS;
-    public static Block INFINITY_PORTAL;
+    public static Block ENDLESS_PORTAL;
     public static Block RAINBOW_BOOKSHELF;
     public static BlockEntityType<BoxOfInfiniteBooksBlockEntity> BOX_OF_INFINITE_BOOKS_BLOCK_ENTITY;
-    public static BlockEntityType<InfinityPortalBlockEntity>    INFINITY_PORTAL_BLOCK_ENTITY;
+    public static BlockEntityType<EndlessPortalBlockEntity>    ENDLESS_PORTAL_BLOCK_ENTITY;
 
     private ModBlocks() {}
 
@@ -39,13 +39,13 @@ public final class ModBlocks {
 
         BOX_OF_INFINITE_BOOKS_BLOCK_ENTITY = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, "box_of_infinite_books"),
+                Identifier.fromNamespaceAndPath(EndlessPortals.MOD_ID, "box_of_infinite_books"),
                 FabricBlockEntityTypeBuilder.create(
                         BoxOfInfiniteBooksBlockEntity::new, BOX_OF_INFINITE_BOOKS).build());
 
         // Rainbow Infinite Bookshelf: right-click for a unique, signed, rainbow-ink book, forever.
         // No block entity needed - the never-repeat counter lives in world SavedData (RainbowShelfData).
-        // Uses the normal loot table (data/infinity_dimensions/loot_table/blocks/rainbow_bookshelf.json).
+        // Uses the normal loot table (data/endless_portals/loot_table/blocks/rainbow_bookshelf.json).
         RAINBOW_BOOKSHELF = registerWithItem("rainbow_bookshelf", key ->
                 new RainbowBookshelfBlock(BlockBehaviour.Properties.of()
                         .mapColor(MapColor.WOOD)
@@ -54,10 +54,10 @@ public final class ModBlocks {
                         .lightLevel(state -> 8)   // it glows a little, like a rainbow should
                         .setId(key)));
 
-        // InfinityPortalBlock is world-generated only — no BlockItem.
-        ResourceKey<Block> portalKey = blockKey("infinity_portal");
-        INFINITY_PORTAL = Registry.register(BuiltInRegistries.BLOCK, portalKey,
-                new InfinityPortalBlock(BlockBehaviour.Properties.of()
+        // EndlessPortalBlock is world-generated only — no BlockItem.
+        ResourceKey<Block> portalKey = blockKey("endless_portal");
+        ENDLESS_PORTAL = Registry.register(BuiltInRegistries.BLOCK, portalKey,
+                new EndlessPortalBlock(BlockBehaviour.Properties.of()
                         .noCollision()
                         .lightLevel(state -> 11)
                         .strength(-1.0f)
@@ -65,10 +65,10 @@ public final class ModBlocks {
                         .noLootTable()
                         .setId(portalKey)));
 
-        INFINITY_PORTAL_BLOCK_ENTITY = Registry.register(
+        ENDLESS_PORTAL_BLOCK_ENTITY = Registry.register(
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
                 portalKey.identifier(),
-                FabricBlockEntityTypeBuilder.create(InfinityPortalBlockEntity::new, INFINITY_PORTAL).build()
+                FabricBlockEntityTypeBuilder.create(EndlessPortalBlockEntity::new, ENDLESS_PORTAL).build()
         );
 
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(output ->
@@ -81,7 +81,7 @@ public final class ModBlocks {
 
     private static ResourceKey<Block> blockKey(String name) {
         return ResourceKey.create(Registries.BLOCK,
-                Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, name));
+                Identifier.fromNamespaceAndPath(EndlessPortals.MOD_ID, name));
     }
 
     private static <T extends Block> T registerWithItem(String name, java.util.function.Function<ResourceKey<Block>, T> factory) {

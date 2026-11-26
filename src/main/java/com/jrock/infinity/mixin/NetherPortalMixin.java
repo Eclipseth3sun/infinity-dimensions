@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Intercepts entities entering a Nether Portal.
- * Written Books are consumed and the portal frame is converted to an InfinityPortalBlock
+ * Written Books are consumed and the portal frame is converted to an EndlessPortalBlock
  * pointing at the dimension derived from the book's content.
  */
 @Mixin(NetherPortalBlock.class)
