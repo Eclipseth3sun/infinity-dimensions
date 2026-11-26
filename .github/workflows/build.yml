@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [main, '26.3']
+    branches: ['**']
     tags: ['v*']
   pull_request:
   workflow_dispatch:
