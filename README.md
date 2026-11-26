@@ -261,7 +261,7 @@ Versions live in `gradle.properties` (`minecraft_version`, `loader_version`, `fa
 
 ### Continuous integration and releases
 
-The **Build** workflow runs on every push and pull request:
+The **Build** workflow runs on pushes to `main` and `26.3`, on pull requests, and on version tags:
 
 1. **Build & package.** Compiles the mod and uploads `EndlessPortals-<version>.zip`, containing the jar, this README and install notes, plus the bare jar.
 2. **Smoke test.** Boots a real dev server and fails if the game never reaches *Done* or logs a fatal error, and uploads the server log either way. Startup crashes show up here before anyone downloads a build.
@@ -271,6 +271,8 @@ The **Build** workflow runs on every push and pull request:
 git tag v1.2.0
 git push origin v1.2.0
 ```
+
+The **Apply Endless Portals update** workflow is manually dispatched from the Actions tab. It must first be present on the repository's default branch; when running it, select `26.3` as the branch. It pushes the update to `endless-portals-update`, dispatches Build for that branch, and opens a pull request back to `26.3`.
 
 ## Troubleshooting
 
