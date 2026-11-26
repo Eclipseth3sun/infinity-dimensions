@@ -1,0 +1,72 @@
+name: Apply Endless Portals update
+
+# Run this from the Actions tab with the 26.3 branch selected. It applies the update,
+# pushes a review branch, dispatches Build for that branch, and opens a pull request.
+on:
+  workflow_dispatch:
+    inputs:
+      keep_ids:
+        description: 'Keep the old mod id / block id (save-compatible). Leave OFF to rename everything to endless_portals.'
+        type: boolean
+        default: false
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Apply update script
+        run: |
+          if [ "${{ inputs.keep_ids }}" = "true" ]; then
+            python3 tools/apply_update.py --keep-ids
+          else
+            python3 tools/apply_update.py
+          fi
+
+      - name: Commit update and open pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${GITHUB_REF_NAME}" = "endless-portals-update" ]; then
+            echo "::error::Run this workflow from the 26.3 branch, not the generated update branch."
+            exit 1
+          fi
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B endless-portals-update
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit; the update is already applied on ${GITHUB_REF_NAME}." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git commit -m "Endless Portals update: 26.3 port, fabric.mod.json fix, rainbow portals, bookshelf"
+          git push --force origin endless-portals-update
+
+          gh workflow run build.yml --ref endless-portals-update
+
+          pull_request_url="$(gh pr list \
+            --state open \
+            --head "${GITHUB_REPOSITORY_OWNER}:endless-portals-update" \
+            --base "${GITHUB_REF_NAME}" \
+            --json url \
+            --jq '.[0].url // empty')"
+          if [ -z "$pull_request_url" ]; then
+            pull_request_url="$(gh pr create \
+              --base "${GITHUB_REF_NAME}" \
+              --head endless-portals-update \
+              --title "Apply Endless Portals update" \
+              --body "Applies the Endless Portals update to \`${GITHUB_REF_NAME}\`. The Build workflow was dispatched for this branch.")"
+          fi
+
+          {
+            echo "Dispatched the Build workflow for \`endless-portals-update\`."
+            echo "Pull request: ${pull_request_url}"
+          } >> "$GITHUB_STEP_SUMMARY"

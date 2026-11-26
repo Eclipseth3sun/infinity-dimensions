@@ -1,6 +1,6 @@
 package com.jrock.infinity.worldgen;
 
-import com.jrock.infinity.InfinityDimensions;
+import com.jrock.infinity.EndlessPortals;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.BiomeResolver;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
 
@@ -75,10 +76,10 @@ public class InfinityBiomeSource extends BiomeSource {
     protected MapCodec<? extends BiomeSource> codec() { return CODEC; }
 
     @Override
-    public Holder<Biome> getNoiseBiome(int x, int y, int z, Climate.Sampler sampler) {
+    public BiomeResolver createResolver(Climate.Sampler sampler) {
         if (biome == null) throw new IllegalStateException(
                 "InfinityBiomeSource not fully initialised (seed=" + seed + ")");
-        return biome;
+        return (x, y, z) -> biome;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class InfinityBiomeSource extends BiomeSource {
 
     public static void register() {
         Registry.register(BuiltInRegistries.BIOME_SOURCE,
-                Identifier.fromNamespaceAndPath(InfinityDimensions.MOD_ID, "infinity"),
+                Identifier.fromNamespaceAndPath(EndlessPortals.MOD_ID, "infinity"),
                 CODEC);
     }
 

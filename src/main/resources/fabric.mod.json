@@ -1,27 +1,35 @@
 {
   "schemaVersion": 1,
-  "id": "infinity_dimensions",
+  "id": "endless_portals",
   "version": "${version}",
-  "name": "Infinity Dimensions",
-  "description": "A port of the 20w14∞ April Fools snapshot to modern Minecraft. Throw a written book into a Nether Portal to travel to a unique dimension based on its contents.",
-  "authors": ["jrock"],
-  "contact": {},
+  "name": "Endless Portals",
+  "description": "Throw a written book into a Nether Portal and walk into a world written by its words. A Fabric port of the 20w14∞ April Fools snapshot, with an infinite rainbow bookshelf.",
+  "authors": [
+    "jrock"
+  ],
+  "contact": {
+    "homepage": "https://github.com/elitexlite/Endless-portals",
+    "sources": "https://github.com/elitexlite/Endless-portals",
+    "issues": "https://github.com/elitexlite/Endless-portals/issues"
+  },
   "license": "MIT",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.jrock.infinity.InfinityDimensions"
+      "com.jrock.infinity.EndlessPortals"
     ],
     "client": [
-      "com.jrock.infinity.InfinityDimensionsClient"
+      "com.jrock.infinity.EndlessPortalsClient"
     ]
   },
   "mixins": [
-    "infinity_dimensions.mixins.json"
+    "endless_portals.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.19.2",
+    "fabricloader": ">=0.20.1",
     "fabric-api": "*",
-    "minecraft": "26.1.2"
-  }
+    "minecraft": "~26.3",
+    "java": ">=25"
+  },
+  "icon": "assets/endless_portals/icon.png"
 }

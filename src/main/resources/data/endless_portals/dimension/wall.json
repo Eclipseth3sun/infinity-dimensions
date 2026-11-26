@@ -1,0 +1,11 @@
+﻿{
+    "type":  "endless_portals:wall",
+    "generator":  {
+                      "type":  "endless_portals:named",
+                      "theme":  "wall",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "minecraft:plains"
+                                       }
+                  }
+}

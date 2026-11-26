@@ -1,6 +1,0 @@
-﻿{
-  "parent": "infinity_dimensions:block/infinity_portal_z",
-  "textures": {
-    "portal": "infinity_dimensions:block/infinity_portal_void_teal"
-  }
-}

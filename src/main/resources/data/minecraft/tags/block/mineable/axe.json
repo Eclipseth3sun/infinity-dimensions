@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "infinity_dimensions:box_of_infinite_books"
+    "endless_portals:box_of_infinite_books",
+    "endless_portals:rainbow_bookshelf"
   ]
 }

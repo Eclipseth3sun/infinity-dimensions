@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=north": [
+      { "model": "endless_portals:block/book_box_a" },
+      { "model": "endless_portals:block/book_box_b" },
+      { "model": "endless_portals:block/book_box_c" },
+      { "model": "endless_portals:block/book_box_d" }
+    ],
+    "facing=south": [
+      { "model": "endless_portals:block/book_box_a", "y": 180 },
+      { "model": "endless_portals:block/book_box_b", "y": 180 },
+      { "model": "endless_portals:block/book_box_c", "y": 180 },
+      { "model": "endless_portals:block/book_box_d", "y": 180 }
+    ],
+    "facing=west": [
+      { "model": "endless_portals:block/book_box_a", "y": 270 },
+      { "model": "endless_portals:block/book_box_b", "y": 270 },
+      { "model": "endless_portals:block/book_box_c", "y": 270 },
+      { "model": "endless_portals:block/book_box_d", "y": 270 }
+    ],
+    "facing=east": [
+      { "model": "endless_portals:block/book_box_a", "y": 90 },
+      { "model": "endless_portals:block/book_box_b", "y": 90 },
+      { "model": "endless_portals:block/book_box_c", "y": 90 },
+      { "model": "endless_portals:block/book_box_d", "y": 90 }
+    ]
+  }
+}

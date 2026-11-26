@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end":  "endless_portals:block/rainbow_bookshelf_top",
+    "side": "endless_portals:block/rainbow_bookshelf_side"
+  }
+}

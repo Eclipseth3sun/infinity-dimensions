@@ -14,7 +14,7 @@ import java.util.concurrent.Executor;
 
 /**
  * Exposes private MinecraftServer fields needed for runtime dimension creation.
- * Field names verified against MC 26.1.2 decompiled source.
+ * Field names verified against the MC 26.x decompiled source.
  */
 @Mixin(MinecraftServer.class)
 public interface MinecraftServerAccessor {
